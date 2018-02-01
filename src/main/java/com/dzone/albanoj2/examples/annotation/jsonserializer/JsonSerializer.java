@@ -9,7 +9,7 @@ import java.util.Map;
 
 public class JsonSerializer {
 
-	public <T> String serialize(T object) throws JsonSerializeException {
+	public String serialize(Object object) throws JsonSerializeException {
 		
 		try {
 			Class<?> objectClass = requireNonNull(object).getClass();
@@ -18,10 +18,10 @@ public class JsonSerializer {
 			for (Field field: objectClass.getDeclaredFields()) {
 				field.setAccessible(true);
 				if (field.isAnnotationPresent(JsonField.class)) {
-					jsonElements.put(getSerializedKey(field, object), (String) field.get(object));
+					jsonElements.put(getSerializedKey(field), (String) field.get(object));
 				}
 			}
-			
+			System.out.println(toJsonString(jsonElements));
 			return toJsonString(jsonElements);
 		}
 		catch (IllegalAccessException e) {
@@ -37,7 +37,7 @@ public class JsonSerializer {
 		return "{" + elementsString + "}";
 	}
 	
-	private static <T> String getSerializedKey(Field field, T object) {
+	private static String getSerializedKey(Field field) {
 		String annotationValue = field.getAnnotation(JsonField.class).value();
 		
 		if (annotationValue.isEmpty()) {
