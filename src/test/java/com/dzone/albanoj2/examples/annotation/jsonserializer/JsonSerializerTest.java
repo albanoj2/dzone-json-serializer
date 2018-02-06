@@ -12,12 +12,12 @@ public class JsonSerializerTest {
 	
 	@Test(expected = NullPointerException.class)
 	public void serializeNullObjectEnsureNullPointerExceptionThrown() throws Exception {
-		new JsonSerializer().serialize(null);
+		new JsonSerializer(new JsonSerializableFieldExtractor()).serialize(null);
 	}
 
 	@Test
 	public void serializeCarObjectEnsureCorrectOutputJson() throws Exception {
-		JsonSerializer serializer = new JsonSerializer();
+		JsonSerializer serializer = new JsonSerializer(new JsonSerializableFieldExtractor());
 		Car testCar = new Car("Ford", "F150", "2018");
 		String json = serializer.serialize(testCar);
 		assertThat(json, isExpectedCarJson(testCar));
